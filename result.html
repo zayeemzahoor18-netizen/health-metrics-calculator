@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Health Results</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px 14px;
+            font-family: Arial, sans-serif;
+            color: #17252f;
+            background: linear-gradient(135deg, #edf7f2, #f3f6fb);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-size: 32px;
+        }
+
+        header p, .muted {
+            color: #60717d;
+            line-height: 1.6;
+        }
+
+        .pill {
+            display: inline-block;
+            background: #eef7f2;
+            color: #176b55;
+            padding: 6px 11px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .card, .panel {
+            background: white;
+            border: 1px solid #e4ece8;
+            border-radius: 13px;
+            padding: 19px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px #17382d09;
+        }
+
+        .label {
+            color: #60717d;
+            font-size: 13px;
+        }
+
+        .value {
+            color: #176b55;
+            font-size: 25px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .sub {
+            color: #60717d;
+            font-size: 13px;
+        }
+
+        .panel {
+            margin-top: 16px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .macros {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .macro {
+            background: #eef7f2;
+            padding: 14px;
+            border-radius: 9px;
+        }
+
+        .meal {
+            border: 1px solid #e3ece7;
+            border-radius: 11px;
+            margin-top: 13px;
+            overflow: hidden;
+        }
+
+        .meal h3 {
+            background: #eef7f2;
+            color: #176b55;
+            padding: 13px 15px;
+            margin: 0;
+        }
+
+        .food {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            border-top: 1px solid #edf1ef;
+        }
+
+        .food small {
+            display: block;
+            color: #60717d;
+            line-height: 1.6;
+            margin-top: 4px;
+        }
+
+        .food .kcal {
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .totals {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 9px;
+            margin-top: 16px;
+        }
+
+        .total {
+            background: #f5f8f7;
+            padding: 13px;
+            border-radius: 9px;
+        }
+
+        .total strong {
+            display: block;
+            margin-top: 7px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 9px;
+            background: #176b55;
+            color: white;
+            font-weight: bold;
+        }
+
+        .actions a.secondary {
+            color: #176b55;
+            background: white;
+            border: 1px solid #b9d5ca;
+        }
+
+        .notice {
+            font-size: 12px;
+            color: #60717d;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 650px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .macros {
+                grid-template-columns: 1fr;
+            }
+
+            .totals {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .food {
+                flex-direction: column;
+            }
+
+            header h1 {
+                font-size: 27px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .actions {
+                display: none;
+            }
+
+            .card, .panel {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <header>
+        <span class="pill">YOUR HEALTH REPORT</span>
+        <h1>Health Results, {{ name }}</h1>
+        <p>Age {{ age }} · Goal: {{ goal }}</p>
+    </header>
+
+    <section class="cards">
+
+        <div class="card">
+            <div class="label">BMI</div>
+            <div class="value">{{ bmi }}</div>
+            <div class="sub">{{ category }}</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Estimated BMR</div>
+            <div class="value">{{ bmr }}</div>
+            <div class="sub">kcal/day at rest</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Maintenance calories</div>
+            <div class="value">{{ maintenance }}</div>
+            <div class="sub">Estimated kcal/day</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Daily calorie target</div>
+            <div class="value">{{ target_calories }}</div>
+            <div class="sub">Estimated kcal/day</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Estimated protein target</div>
+            <div class="value">{{ protein }} g</div>
+            <div class="sub">Per day</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Estimated carbohydrate target</div>
+            <div class="value">{{ carbs }} g</div>
+            <div class="sub">Per day</div>
+        </div>
+
+    </section>
+
+    <section class="panel">
+        <h2>Daily Macronutrient Targets</h2>
+
+        <div class="macros">
+            <div class="macro">
+                <div class="label">Protein</div>
+                <strong>{{ protein }} g/day</strong>
+            </div>
+
+            <div class="macro">
+                <div class="label">Carbohydrates</div>
+                <strong>{{ carbs }} g/day</strong>
+            </div>
+
+            <div class="macro">
+                <div class="label">Fat</div>
+                <strong>{{ fats }} g/day</strong>
+            </div>
+        </div>
+
+        <p class="notice">
+            These are estimates based on a simple 25% protein,
+            45% carbohydrate, and 30% fat calorie split.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Your Daily Diet Plan</h2>
+
+        <p class="muted">
+            Food quantities and nutrition are approximate. Cooked rice,
+            dal, chicken, and vegetables are measured after cooking;
+            roti quantity refers to the flour used.
+        </p>
+
+        {% for meal in diet_plan %}
+        <div class="meal">
+
+            <h3>{{ meal["name"] }}</h3>
+
+            {% for item in meal["items"] %}
+            <div class="food">
+
+                <div>
+                    <strong>{{ item["name"] }}</strong>
+
+                    <small>
+                        Quantity: {{ item["quantity"] }} {{ item["unit"] }}<br>
+                        Protein: {{ item["protein"] }} g ·
+                        Carbs: {{ item["carbs"] }} g ·
+                        Fat: {{ item["fat"] }} g
+                    </small>
+                </div>
+
+                <div class="kcal">
+                    {{ item["calories"] }} kcal
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+
+        <h2 style="margin-top: 24px;">Daily Diet Totals</h2>
+
+        <div class="totals">
+
+            <div class="total">
+                <span class="label">Calories</span>
+                <strong>{{ diet_totals["calories"] }} kcal</strong>
+            </div>
+
+            <div class="total">
+                <span class="label">Protein</span>
+                <strong>{{ diet_totals["protein"] }} g</strong>
+            </div>
+
+            <div class="total">
+                <span class="label">Carbohydrates</span>
+                <strong>{{ diet_totals["carbs"] }} g</strong>
+            </div>
+
+            <div class="total">
+                <span class="label">Fat</span>
+                <strong>{{ diet_totals["fat"] }} g</strong>
+            </div>
+
+        </div>
+
+        <p class="notice">
+            The plan adjusts portions within a limited range, so its
+            calorie total may differ from your target. It is an
+            illustrative menu, not a medically personalized diet.
+            Check food allergies and dietary restrictions before using it.
+        </p>
+    </section>
+
+    <div class="actions">
+        <a href="/">← Back to Calculator</a>
+
+        <a class="secondary" href="#"
+           onclick="window.print(); return false;">
+            Print / Save as PDF
+        </a>
+    </div>
+
+</main>
+</body>
+</html>
