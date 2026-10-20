@@ -1,1 +1,190 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Metrics Calculator</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 28px 15px;
+            font-family: Arial, sans-serif;
+            color: #17252f;
+            background: linear-gradient(135deg, #edf7f2, #f3f6fb);
+        }
+        .container {
+            max-width: 720px;
+            margin: auto;
+        }
+        header { text-align: center; margin-bottom: 25px; }
+        header span {
+            color: #176b55;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+        h1 { margin: 12px 0; font-size: 34px; }
+        header p { color: #60717d; line-height: 1.6; }
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 12px 36px #17382d12;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .full { grid-column: 1 / -1; }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d3ded9;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+        input:focus, select:focus {
+            outline: 2px solid #a5d9c5;
+            border-color: #176b55;
+        }
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            color: white;
+            background: #176b55;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #10513f; }
+        .error {
+            background: #fff0f0;
+            color: #8b2020;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .note {
+            color: #60717d;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 18px;
+        }
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .full { grid-column: auto; }
+            .panel { padding: 20px; }
+            h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <span>YOUR EVERYDAY WELLNESS TOOL</span>
+            <h1>Health Metrics Calculator</h1>
+            <p>
+                Calculate your BMI, estimated daily energy needs,
+                macros, and a portion-based meal plan.
+            </p>
+        </header>
+
+        <section class="panel">
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <form action="/calculate" method="POST">
+                <div class="grid">
+                    <div class="full">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name"
+                               maxlength="80" required>
+                    </div>
+
+                    <div>
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age"
+                               min="1" max="120" required>
+                    </div>
+
+                    <div>
+                        <label for="gender">Sex used for BMR estimate</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Choose an option</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight"
+                               min="20" max="500" step="0.1" required>
+                    </div>
+
+                    <div>
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height"
+                               min="80" max="250" step="0.1" required>
+                    </div>
+
+                    <div class="full">
+                        <label for="activity">Activity level</label>
+                        <select id="activity" name="activity" required>
+                            <option value="">Choose your activity</option>
+                            <option value="1.2">
+                                Sedentary — mostly sitting
+                            </option>
+                            <option value="1.375">
+                                Lightly active — exercise 1–3 days/week
+                            </option>
+                            <option value="1.55">
+                                Moderately active — exercise 3–5 days/week
+                            </option>
+                            <option value="1.725">
+                                Very active — hard exercise 6–7 days/week
+                            </option>
+                            <option value="1.9">
+                                Extra active — intense training or physical work
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="full">
+                        <label for="goal">Your goal</label>
+                        <select id="goal" name="goal" required>
+                            <option value="maintain">Maintain weight</option>
+                            <option value="lose">Lose weight</option>
+                            <option value="gain">Gain weight</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit">
+                    Calculate My Health Metrics →
+                </button>
+            </form>
+
+            <p class="note">
+                Estimates are for educational use, not medical diagnosis.
+                BMI and calorie needs should be interpreted in context.
+                The sample meal plan may not fit every dietary need.
+            </p>
+        </section>
+    </main>
+</body>
+</html>
