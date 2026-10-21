@@ -71,7 +71,7 @@ health-metrics-calculator/
 ### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+https://github.com/zayeemzahoor18-netizen/health-metrics-calculator.git
 ```
 
 Replace `YOUR_GITHUB_REPOSITORY_URL` with your actual GitHub repository URL.
